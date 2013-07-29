@@ -6,14 +6,9 @@ if (typeof process == 'undefined' || process.argv[0] != "node") {
 
 var argv = require('optimist')
 			.default('m','1')
-			.default('i','img/tax.jpg')
-			.default('o','./result.txt')
 			.argv;
 
-//!!! Please provide your application id and password and remove this line !!!
-// Name of application you created
 var appId = 'Document similarity for uploaded forms';
-// Password should be sent to your e-mail after application was created
 var password = 'gXYVNyQgHTHqGLNBOkWSITCH';
 
 var imagePath = argv.i;
@@ -30,13 +25,13 @@ try {
 		throw new Error("Please provide your application id and password!");
 	}
 	
-	if( imagePath == 'myFile.jpg') {
+	if( imagePath == 'myFile.jpg' || outputPath == '') {
 		throw new Error( "Please provide path to your image!")
 	}
 
 	function downloadCompleted(error) {
 		if (error) {
-			console.log("Error: " + error.message);
+			console.log("Errora: " + error.message);
 			return;
 		}
 		console.log("Done.");
@@ -59,8 +54,7 @@ try {
 		console.log("Processing completed.");
 		console.log("Downloading result to " + outputPath);
 
-		ocrsdk
-				.downloadResult(taskData.resultUrl, outputPath,
+		ocrsdk.downloadResult(taskData.resultUrl, outputPath,
 						downloadCompleted);
 	}
 
@@ -93,8 +87,7 @@ try {
 		return max + 1;
 	};
 
-	function addDocToDB(doc, idf) {
-		console.log("Adding");
+	function getNewDocs(doc, idf) {
 		var master_idf = idf || {};
 		var tokens = doc.tokens;
 		var newTokens = {};
@@ -114,11 +107,37 @@ try {
 		doc.tokens = newTokens;
 		delete master_idf.serializeFunctions;
 
-		console.log(JSON.stringify(master_idf));
-		console.log(JSON.stringify(doc));
+		//console.log(JSON.stringify(master_idf));
+		//console.log(JSON.stringify(doc));
 
-		docs.insert(doc);
-		master.update({}, master_idf, {upsert:true});
+		return [master_idf, doc];
+
+	};
+
+	function addDocToDB(doc, idf) {
+		var retdocs = getNewDocs(doc, idf);
+
+		docs.insert(retdocs[1]);
+		master.update({}, retdocs[0], {upsert:true});
+	}
+
+	function compareDocs(doc, idf) {
+		var retdocs = getNewDocs(doc, idf);
+
+		docs.find({}).toArray(function (err, items) {
+		console.log(items);
+			if (err)
+				console.log(err);
+			else {
+				var qtokens = retdocs[0].tokens;
+				console.log(qtokens);
+				
+				items.forEach(function (el) {
+					var dtokens = el.tokens;
+					console.log(el);
+				});
+			}
+		});
 	};
 
 	var settings = new ocrsdkModule.ProcessingSettings();
@@ -155,6 +174,7 @@ try {
 				}
 				else if (argv.m == '2') {
 					console.log("Comparing doc");
+					compareDocs(newdoc, idf);
 				}
 				mc.db.close();
 			});
