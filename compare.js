@@ -7,7 +7,7 @@ if (typeof process == 'undefined' || process.argv[0] != "node") {
 var argv = require('optimist')
 			.default('m','1')
 			.default('i','img/tax.jpg')
-			.default('o','result.txt')
+			.default('o','./result.txt')
 			.argv;
 
 //!!! Please provide your application id and password and remove this line !!!
@@ -94,6 +94,7 @@ try {
 	};
 
 	function addDocToDB(doc, idf) {
+		console.log("Adding");
 		var master_idf = idf || {};
 		var tokens = doc.tokens;
 		var newTokens = {};
@@ -126,7 +127,7 @@ try {
 	settings.exportFormat = "txt"; // All possible values are listed in 'exportFormat' parameter description 
                                    // at http://ocrsdk.com/documentation/apireference/processImage/
 
-	//console.log("Uploading image..");
+	console.log("Uploading image..");
 	//ocrsdk.processImage(imagePath, settings, uploadCompleted);
 
 	var MongoConnection = require('./MongoConnection');
@@ -143,7 +144,8 @@ try {
 
 			var newdoc = wp.getDetails( wp.tokenize());
 			newdoc.file = imagePath;
-			//console.log(newdoc);
+			
+			console.log("newdoc");
 
 			master.find({}).toArray(function (err, items) {
 				var idf = items[0];
