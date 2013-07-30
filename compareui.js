@@ -1,6 +1,12 @@
 var express = require('express');
 var app = express();
 
+app.post('/upload', function(req, res) {
+    console.log(JSON.stringify(req.files));
+	res.end('File uploaded.');
+});
+
+/*
 app.get('/api/:func', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
  
@@ -30,6 +36,8 @@ app.get('/api/:func', function (req, res) {
     res.end('You called to the api '+req.params.func);
   }, t);
 });
+
+*/
 
 app.use(express.static(__dirname + '/public'));
 

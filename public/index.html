@@ -6,6 +6,12 @@
 <body>
     <h1>This is Node.js (index)</h1>
     <p>Serving content through predictable means.</p>
+    <form enctype="multipart/form-data" method="post" action="/upload">
+        <input name="userfile" type="file" id="userfile" />
+        <input type="submit" id="upload" value="Upload" />
+    </form>
+    <progress></progress>
+    <p>&nbsp;</p>
     <input type="text" id="fnc" value="jake" />
     <input type="button" id="btn" value="load" />
     <div id="test" style="border: #333333 1px solid; ;"></div>
