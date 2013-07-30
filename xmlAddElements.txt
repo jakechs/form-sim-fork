@@ -1,0 +1,40 @@
+/* ===================================================
+ * xmlAddElements - 
+ * Parse XML and add detected elements as DOM objects to a node id "addHere"
+ * ===================================================
+ * Copyright 2013 Adobe Systems, Inc.
+ * ========================================================== */
+
+
+/* Example use:
+ $(document).ready(function(){
+     fileGraphXMLObj.readXMLfromURL("Browser1/blah.xml");
+ });
+ will add element fileName header to an existing page element with name "addHere"
+ so it can be embedded as needed.
+ e.g.
+ <div id="addHere"></div>
+*/
+
+!function ($) {
+    $.fn.fileGraphXML = function() {
+
+    }
+    $.fn.fileGraphXML.readXMLDoc = (function (xml) {
+            $(xml).find("fileEntry").each(function () {
+                $("#addHere").append('<ul><li><h3>' +
+                $(this).find("fileName").text() +
+                       '</h3></li></ul>');
+            });
+        });
+    });
+
+    $.fn.fileGraphXML.readXMLfromURL = (function (urlIn) {
+        $.ajax({
+               type: "GET",
+               url: urlIn,
+               dataType: "xml",
+               success: $.fn.fileGraphXML.readXMLDoc
+        });
+    });
+}(window.jQuery);

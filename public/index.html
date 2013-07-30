@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html><head>
+<title>Simiform</title>
+<script type="text/javascript" src="../assets/jquery-1.10.2.js"></script>
+</head>
+<body>
+    <h1>This is Node.js (index)</h1>
+    <p>Serving content through predictable means.</p>
+    <input type="text" id="fnc" value="jake" />
+    <input type="button" id="btn" value="load" />
+    <div id="test" style="border: #333333 1px solid; ;"></div>
+    <script>
+    $(document).ready(function() {
+        $('#btn').click(function (){
+            $.ajax({
+                url: 'http://localhost:3000/api/'+$('#fnc').val(),
+                cache: false,
+                timeout: 5000,
+                success: function(data) {
+                    $("#test").append('<p>'+data+'<p>');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('error ' + textStatus + " " + errorThrown);
+                }
+            });
+        });
+    });
+    </script>
+</body></html>
