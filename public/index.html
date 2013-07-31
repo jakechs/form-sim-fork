@@ -14,12 +14,11 @@ $(function () {
     var $element2 = $('#search2');
     var dummydocs = { 
             size: 3,
-            0: {id:'img1', con: 0.84566, title: 'Sanity Form'}, 
-            1: {id:'img2', con: 0.74855, title: 'Calculation Form'}, 
-            2: {id:'img3', con: 0.34762, title: 'Getting Started'},
+            0: {id:'sport.png', con: 0.84566, title: 'Sanity Form'}, 
+            1: {id:'sport11.jpg', con: 0.74855, title: 'Calculation Form'}, 
+            2: {id:'sport12.jpg', con: 0.34762, title: 'Getting Started'},
         };
-    var doc2 = {size: 3, 0: { id: 'img_load/Enrollment.pdf', con: 0.999918153517}, 1: { id: 'img_load/ContactUs11.jpg', con: 0.266693019785}, 2: { id: 'img_load/ContactUs.png', con: 0.249407159237}}
-    
+    var docs = {size: 3, 2: { id: 'img_load/sport.png', con: 0.795481123}, 1: { id: 'img_load/sport11.jpg', con: 0.845147552}, 0: { id: 'img_load/sport12.jpg', con: 0.999918153517}}
     var images = ['url(assets/img1.png)', 'url(assets/img2.png)', 'url(assets/img3.png)'];
     var state = {
         filename: 'sport12.jpg'
@@ -120,25 +119,25 @@ $(function () {
             $( "#upload_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==1){
             console('Switching to step 1.');
-            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
-            $( "#upload_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
             $( "#upload_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==2){
             console('Switching to step 2.');
-            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
-            $( "#upload_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
             $( "#upload_prog" ).switchClass( "start", "done", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==3){
             console('Switching to step 3.');
-            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
-            $( "#upload_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
             $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "start", "done", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
@@ -160,27 +159,54 @@ $(function () {
         
     }
     
+    $(window).bind('beforeunload', function(){
+      if (state.loading){
+        return 'You have unsaved data. If you leave now your state will not be saved.';
+      }else{
+          return undefined;
+      }
+    });
+    
+    $('#preview_0').click(function (){
+        console('Full view of preview image 0.');
+        var img = (docs['0'].id).substring(9);
+       $('#final_right').css('background-image', 'url(assets/full/'+img+'.png)');
+    });
+    
+    $('#preview_1').click(function (){
+        console('Full view of preview image 1.');
+        var img = (docs['1'].id).substring(9);
+       $('#final_right').css('background-image', 'url(assets/full/'+img+'.png)');
+    });
+    
+    $('#preview_2').click(function (){
+        console('Full view of preview image 2.');
+        var img = (docs['2'].id).substring(9);
+       $('#final_right').css('background-image', 'url(assets/full/'+img+'.png)');
+    });
+    
     function setupFinal(){
         console('Preparing final view.');
-        var docs = dummydocs;
         console('Loading dummy data');
         // Prepare previews
-        $('#preview_0').css('background-image', 'url(assets/preview/'+docs['0'].id+'.png)');
-        $('#preview_0 #title').html(docs['0'].con);
-        $('#preview_1').css('background-image', 'url(assets/preview/'+docs['1'].id+'.png)');
-        $('#preview_1 #title').html(docs['1'].con);
-        $('#preview_2').css('background-image', 'url(assets/preview/'+docs['2'].id+'.png)');
-        $('#preview_2 #title').html(docs['2'].con);
+        $('#preview_0').css('background-image', 'url(assets/preview/'+docs['0'].id.substring(9)+'.png)');
+        $('#preview_0 #title').html((docs['0'].con * 100).toFixed(0) + '% match');
+        $('#preview_1').css('background-image', 'url(assets/preview/'+docs['1'].id.substring(9)+'.png)');
+        $('#preview_1 #title').html((docs['1'].con * 100).toFixed(0) + '% match');
+        $('#preview_2').css('background-image', 'url(assets/preview/'+docs['2'].id.substring(9)+'.png)');
+        $('#preview_2 #title').html((docs['2'].con * 100).toFixed(0) + '% match');
         
         // Prepare original image
         $('#final_left').css('background-image', 'url(assets/full/'+state.filename+'.png)');
         
         //Prepare initial full size preview
-        $('#final_right').html('<h1>Click a preview to view it full size</h1>');
+        $('#final_right').css('background-image', 'url(assets/full/'+docs['0'].id.substring(9)+'.png)');
         
         $('#final_page').fadeIn(500, "easeInOutQuad", function() { setStep(3); } );
     }
+    
     console('Starting page execution.');
+    
     setupFinal();
     
 });
@@ -188,7 +214,7 @@ $(function () {
 <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
 <link href="stylesheets/style.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body >
 
 <!-- Pages ///////////////////////////////////////////////////////////////// --> 
 

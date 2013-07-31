@@ -213,7 +213,7 @@ body{
  float:left;
  padding:10px;
  background-position:center;
- background-size:120px 160px;
+ background-size:140px 180px;
  background-repeat:no-repeat;
  position:relative;
 }
@@ -223,14 +223,19 @@ body{
  cursor:pointer;
 }
 .doc_option #title{
-    width:100%;   
+    width:50%;   
     text-align:center;
-    color:#000;
+    color:white;
+    font-weight:bold;
+    text-shadow:#000 1px 1px 0px;
     bottom:0em;
     position:absolute;
     left:0;
     text-shadow:#CCC 2px;
     font-family:sans-serif;
+    font-size:9px;
+    background-color:#4b96a4;
+    opacity:50%;
     
 }
 
