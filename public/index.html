@@ -8,16 +8,23 @@
 
 
 $(function () {
+    var cnt = 0;
     window.page = 'home';
     var $element = $('#search');
     var $element2 = $('#search2');
     var dummydocs = { 
             size: 3,
-            0: {id:'img1', title: 'Sanity Form'}, 
-            1: {id:'img2', title: 'Calculation Form'}, 
-            2: {id:'img3', title: 'Getting Started'},
+            0: {id:'img1', con: 0.84566, title: 'Sanity Form'}, 
+            1: {id:'img2', con: 0.74855, title: 'Calculation Form'}, 
+            2: {id:'img3', con: 0.34762, title: 'Getting Started'},
         };
+    var doc2 = {size: 3, 0: { id: 'img_load/Enrollment.pdf', con: 0.999918153517}, 1: { id: 'img_load/ContactUs11.jpg', con: 0.266693019785}, 2: { id: 'img_load/ContactUs.png', con: 0.249407159237}}
+    
     var images = ['url(assets/img1.png)', 'url(assets/img2.png)', 'url(assets/img3.png)'];
+    var state = {
+        filename: 'sport12.jpg'
+    }
+    
     function fadeInOut() {
         if(window.page != 'loading_animation'){
             return;
@@ -104,21 +111,37 @@ $(function () {
     
     function setStep(i){
         if(i == 0){
+            console('Switching to step 0.');
+            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
             $( "#upload_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==1){
-            $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            console('Switching to step 1.');
+            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==2){
-            $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            console('Switching to step 2.');
+            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "done", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==3){
+            console('Switching to step 3.');
+            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
             $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
-            $( "#choose_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "done", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
         }
     }
     
@@ -130,18 +153,34 @@ $(function () {
     });
     setStep(0); 
     // $('#upload_page').fadeIn(500, "easeInOutQuad", function() { setStep(1); } );
-    
-    function setupFinal(){
-        var docs = dummydocs;
-        $('#preview_0').css('background-image', 'url(assets/'+docs['0'].id+'.png)');
-        $('#preview_0 #title').html(docs['0'].title);
-        $('#preview_1').css('background-image', 'url(assets/'+docs['1'].id+'.png)');
-        $('#preview_1 #title').html(docs['1'].title);
-        $('#preview_2').css('background-image', 'url(assets/'+docs['2'].id+'.png)');
-        $('#preview_2 #title').html(docs['2'].title);
-        $('#final_page').fadeIn(500, "easeInOutQuad", function() { setStep(3); } );
+    function console(str){
+        cnt++;
+        $('#form_console').append(cnt+'['+arguments.callee.caller.name+']'+str+"\n");
+        $('#form_console').scrollTop($('#form_console')[0].scrollHeight);
+        
     }
     
+    function setupFinal(){
+        console('Preparing final view.');
+        var docs = dummydocs;
+        console('Loading dummy data');
+        // Prepare previews
+        $('#preview_0').css('background-image', 'url(assets/preview/'+docs['0'].id+'.png)');
+        $('#preview_0 #title').html(docs['0'].con);
+        $('#preview_1').css('background-image', 'url(assets/preview/'+docs['1'].id+'.png)');
+        $('#preview_1 #title').html(docs['1'].con);
+        $('#preview_2').css('background-image', 'url(assets/preview/'+docs['2'].id+'.png)');
+        $('#preview_2 #title').html(docs['2'].con);
+        
+        // Prepare original image
+        $('#final_left').css('background-image', 'url(assets/full/'+state.filename+'.png)');
+        
+        //Prepare initial full size preview
+        $('#final_right').html('<h1>Click a preview to view it full size</h1>');
+        
+        $('#final_page').fadeIn(500, "easeInOutQuad", function() { setStep(3); } );
+    }
+    console('Starting page execution.');
     setupFinal();
     
 });
@@ -176,10 +215,13 @@ $(function () {
 
 <!-- Final FOrm -->
 <div id="final_page">
-    <h1>Final content will go here. </h1>
-    
+    <div id="final_left"></div>
+    <div id="final_right"></div>
+    <div id="choice_left" class="choice">Use Original Document</div>
+    <div id="choice_right" class="choice">Use This Preview Document</div>
     <!-- Doc content -->
     <div id="selection">
+        <div id="instructions">Click a form to preview.</div>
         <div class="doc_option" id="preview_0"><div id="title"></div></div>
         <div class="doc_option" id="preview_1"><div id="title"></div></div>
         <div class="doc_option" id="preview_2"><div id="title"></div></div>
@@ -197,6 +239,7 @@ $(function () {
   <div class="prog done" id="choose_prog">
     <p>3</p>
     Fill Your Form </div>
+  <div class="button" id="console"><textarea readonly id="form_console"></textarea></div>
   <div class="button" id="loading"> Start Animation </div>
   <div class="button" id="set0"> Set 0 </div>
 </div>
