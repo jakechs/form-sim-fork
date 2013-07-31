@@ -19,16 +19,18 @@ $(function () {
             2: {id:'sport12.jpg', con: 0.34762, title: 'Getting Started'},
         };
     var docs = {size: 3, 2: { id: 'img_load/sport.png', con: 0.795481123}, 1: { id: 'img_load/sport11.jpg', con: 0.845147552}, 0: { id: 'img_load/sport12.jpg', con: 0.999918153517}}
-    var images = ['url(assets/img1.png)', 'url(assets/img2.png)', 'url(assets/img3.png)'];
+    var images = ['CubScoutMedicalForm.gif.png', 'CubScoutMedicalForm11.pdf.png', 'CubScoutMedicalForm12.jpg.png', 'photo.JPG.png', 'sport.png.png', 'sport11.jpg.png', 'sport12.jpg.png'];
     var state = {
         filename: 'sport12.jpg'
     }
+    
+    
     
     function fadeInOut() {
         if(window.page != 'loading_animation'){
             return;
         }
-        $element.css('background-image', images[Math.floor(Math.random() * images.length)]);
+        $element.css('background-image', 'url(assets/bitmap/'+images[Math.floor(Math.random() * images.length)]+')');
         $element.css('top', '0').fadeIn('slow').animate({
             'top': '100px'
         }, {
@@ -47,7 +49,7 @@ $(function () {
         if(window.page != 'loading_animation'){
             return;
         }
-        $element2.css('background-image', images[Math.floor(Math.random() * images.length)]);
+        $element2.css('background-image', 'url(assets/bitmap/'+images[Math.floor(Math.random() * images.length)]+')');
         $element2.css('top', '0').fadeIn('slow').animate({
             'top': '100px'
         }, {
@@ -74,8 +76,12 @@ $(function () {
     /* Buttons*/ 
     $('#upload_button').click(function(){
        $('#upload_page').fadeOut(500,  "easeInOutQuad", function(){
-       setStep(2);
-       $('#loading_animation').fadeIn(500,  "easeInOutQuad", function (){startLoading(); setTimeout( finalForm, 3000)})   
+       setStep(2);           
+       console('Uploaded file with value: "'+$('#userfile').val().substring(12)+'"');
+       state.filename = $('#userfile').val().substring(12);
+       console('Setup document preview in loading animation.');
+       $('#loading_animation #main').css('background-image', 'url(assets/preview/'+state.filename+'.png)');
+       $('#loading_animation').fadeIn(500,  "easeInOutQuad", function (){startLoading(); setTimeout( finalForm, 5000)})   
     })
     });
     
@@ -104,7 +110,7 @@ $(function () {
         stopLoading();
         setStep(3);
         $('#loading_animation').fadeOut(500,  "easeInOutQuad", function(){
-            $('#final_page').fadeIn(500,  "easeInOutQuad")
+            setupFinal();
         })
     }
     
@@ -119,26 +125,20 @@ $(function () {
             $( "#upload_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==1){
             console('Switching to step 1.');
-            $( "#choose_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
-            $( "#upload_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
             $( "#upload_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==2){
             console('Switching to step 2.');
-            $( "#choose_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
-            $( "#upload_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
             $( "#upload_prog" ).switchClass( "start", "done", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "start", "prog", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
         }else if(i ==3){
             console('Switching to step 3.');
-            $( "#choose_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
-            $( "#similar_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
-            $( "#upload_prog" ).switchClass( "start", "prog", 200, "easeInOutQuad" );
-            $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "start", "done", 500, "easeInOutQuad" );
             $( "#similar_prog" ).switchClass( "start", "done", 500, "easeInOutQuad" );
             $( "#choose_prog" ).switchClass( "", "start", 500, "easeInOutQuad" );
         }
@@ -150,8 +150,6 @@ $(function () {
     $( "#set0" ).click(function() {
         setStep(0);
     });
-    setStep(0); 
-    // $('#upload_page').fadeIn(500, "easeInOutQuad", function() { setStep(1); } );
     function console(str){
         cnt++;
         $('#form_console').append(cnt+'['+arguments.callee.caller.name+']'+str+"\n");
@@ -205,9 +203,15 @@ $(function () {
         $('#final_page').fadeIn(500, "easeInOutQuad", function() { setStep(3); } );
     }
     
+    function init(){
+        setStep(0); 
+        console('Opening #upload_page.');
+        $('#upload_page').fadeIn(500, "easeInOutQuad", function() { setStep(1); } );
+    }
+    
     console('Starting page execution.');
     
-    setupFinal();
+    init();
     
 });
 </script>
@@ -231,7 +235,7 @@ $(function () {
 <!-- 2 Loading Animation -->
 <div id="loading_animation">
   <div id="animation">
-    <div class="doc" id="main">Your Upload Here</div>
+    <div class="doc" id="main"></div>
     <div class="doc" id="search"></div>
     <div class="doc" id="search2"></div>
     <div class="title">Looking for existing metadata...</div>
