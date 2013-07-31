@@ -1,35 +1,180 @@
 <!DOCTYPE html>
-<html><head>
+<html>
+<head>
 <title>Simiform</title>
 <script type="text/javascript" src="../assets/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+
+$(function () {
+    window.page = 'home';
+    var $element = $('#search');
+    var $element2 = $('#search2');
+    var images = ['url(assets/img1.png)', 'url(assets/img2.png)', 'url(assets/img3.png)'];
+    function fadeInOut() {
+        if(window.page != 'loading_animation'){
+            return;
+        }
+        $element.css('background-image', images[Math.floor(Math.random() * images.length)]);
+        $element.css('top', '0').fadeIn('slow').animate({
+            'top': '100px'
+        }, {
+            duration: 1500,
+            queue: false
+        })
+            .fadeOut('slow').animate({
+            'top': '200px'
+        }, {
+            duration: 1500,
+            queue: false,
+            complete: setTimeout(fadeInOut, 1500)
+        });
+    }
+    function fadeInOut2() {
+        if(window.page != 'loading_animation'){
+            return;
+        }
+        $element2.css('background-image', images[Math.floor(Math.random() * images.length)]);
+        $element2.css('top', '0').fadeIn('slow').animate({
+            'top': '100px'
+        }, {
+            duration: 1500,
+            queue: false
+        })
+            .fadeOut('slow').animate({
+            'top': '200px'
+        }, {
+            duration: 1500,
+            queue: false,
+            complete: setTimeout(fadeInOut2, 1500)
+        });
+    }
+    function startLoading(){
+        window.page = 'loading_animation';
+        fadeInOut();
+        setTimeout(fadeInOut2, 750);
+    }
+    function stopLoading(){
+        window.page = 'home';
+    }
+
+    /* Buttons*/ 
+    $('#upload_button').click(function(){
+       $('#upload_page').fadeOut(500,  "easeInOutQuad", function(){
+       setStep(2);
+       $('#loading_animation').fadeIn(500,  "easeInOutQuad", function (){startLoading(); setTimeout( finalForm, 3000)})   
+    })
+    });
+    
+    /* Footer Buttons */
+    $('#loading').click(function (){
+       if(window.page == 'loading_animation'){
+           $('#loading').html('Start Loading');
+           stopLoading();
+       }else{
+           $('#loading').html('Stop Loading');
+           startLoading();
+       }
+    });
+    
+    $('#loading').click(function (){
+       if(window.page == 'loading_animation'){
+           $('#loading').html('Start Loading');
+           stopLoading();
+       }else{
+           $('#loading').html('Stop Loading');
+           startLoading();
+       }
+    });
+    
+    function finalForm(){
+        stopLoading();
+        setStep(3);
+        $('#loading_animation').fadeOut(500,  "easeInOutQuad", function(){
+            $('#final_page').fadeIn(500,  "easeInOutQuad")
+        })
+    }
+    
+    function setStep(i){
+        if(i == 0){
+            $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
+            $( "#upload_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
+        }else if(i ==1){
+            $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
+        }else if(i ==2){
+            $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "done", "prog", 500, "easeInOutQuad" );
+        }else if(i ==3){
+            $( "#upload_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            $( "#similar_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+            $( "#choose_prog" ).switchClass( "", "done", 500, "easeInOutQuad" );
+        }
+    }
+    
+    $( "#upload_prog" ).click(function(){ setStep(1) });
+    $( "#similar_prog" ).click(function(){ setStep(2)});
+    $( "#choose_prog" ).click(function(){ setStep(3)});
+    $( "#set0" ).click(function() {
+        setStep(0);
+    });
+    setStep(0); 
+    $('#upload_page').fadeIn(500, "easeInOutQuad", function() { setStep(1); } );
+    
+    
+    
+});
+</script>
+<link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+<link href="stylesheets/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <h1>This is Node.js (index)</h1>
-    <p>Serving content through predictable means.</p>
-    <form enctype="multipart/form-data" method="post" action="/upload">
-        <input name="userfile" type="file" id="userfile" />
-        <input type="submit" id="upload" value="Upload" />
-    </form>
-    <progress></progress>
-    <p>&nbsp;</p>
-    <input type="text" id="fnc" value="jake" />
-    <input type="button" id="btn" value="load" />
-    <div id="test" style="border: #333333 1px solid; ;"></div>
-    <script>
-    $(document).ready(function() {
-        $('#btn').click(function (){
-            $.ajax({
-                url: 'http://localhost:3000/api/'+$('#fnc').val(),
-                cache: false,
-                timeout: 5000,
-                success: function(data) {
-                    $("#test").append('<p>'+data+'<p>');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('error ' + textStatus + " " + errorThrown);
-                }
-            });
-        });
-    });
-    </script>
-</body></html>
+
+<!-- Pages ///////////////////////////////////////////////////////////////// --> 
+
+<!-- 1 upload -->
+<div id="upload_page">
+  <h1>This is Node.js (index)</h1>
+  <p>Serving content through predictable means.</p>
+  <form enctype="multipart/form-data" method="post" action="/upload">
+    <input name="userfile" type="file" id="userfile" />
+    <input type="button" id="upload_button" value="Upload" />
+  </form>
+</div>
+
+<!-- 2 Loading Animation -->
+<div id="loading_animation">
+  <div id="animation">
+    <div class="doc" id="main">Your Upload Here</div>
+    <div class="doc" id="search"></div>
+    <div class="doc" id="search2"></div>
+    <div class="title">Looking for existing metadata...</div>
+  </div>
+</div>
+
+
+<!-- Final FOrm -->
+<div id="final_page">
+<h1>Final content will go here. </h1>
+</div>
+<!-- Footer ///////////////////////////////////////////////////////////////// -->
+
+<div class="footer">
+  <div class="prog done" id="upload_prog">
+    <p>1</p>
+    Upload Form </div>
+  <div class="prog done" id="similar_prog">
+    <p>2</p>
+    Add Crowdsourced Data </div>
+  <div class="prog done" id="choose_prog">
+    <p>3</p>
+    Fill Your Form </div>
+  <div class="button" id="loading"> Start Animation </div>
+  <div class="button" id="set0"> Set 0 </div>
+</div>
+</body>
+</html>

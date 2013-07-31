@@ -1,10 +1,21 @@
 var express = require('express');
+var fs = require('fs');
 var app = express();
 
-app.post('/upload', function(req, res) {
+app.use(express.bodyParser());
+
+app.post('/api/upload', function(req, res) {
     console.log(JSON.stringify(req.files));
-	res.end('File uploaded.');
+	//res.end('File uploaded. '+JSON.stringify(req.files));
+    fs.readFile(req.files.userfile.path, function (err, data) {
+  // ...
+        var newPath = __dirname + "/uploads/" + req.files.userfile.name;
+        fs.writeFile(newPath, data, function (err) {
+           res.redirect("/compare/"+req.files.userfile.name);
+        });
+    });
 });
+
 
 /*
 app.get('/api/:func', function (req, res) {
