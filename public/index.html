@@ -11,6 +11,12 @@ $(function () {
     window.page = 'home';
     var $element = $('#search');
     var $element2 = $('#search2');
+    var dummydocs = { 
+            size: 3,
+            0: {id:'img1', title: 'Sanity Form'}, 
+            1: {id:'img2', title: 'Calculation Form'}, 
+            2: {id:'img3', title: 'Getting Started'},
+        };
     var images = ['url(assets/img1.png)', 'url(assets/img2.png)', 'url(assets/img3.png)'];
     function fadeInOut() {
         if(window.page != 'loading_animation'){
@@ -123,9 +129,20 @@ $(function () {
         setStep(0);
     });
     setStep(0); 
-    $('#upload_page').fadeIn(500, "easeInOutQuad", function() { setStep(1); } );
+    // $('#upload_page').fadeIn(500, "easeInOutQuad", function() { setStep(1); } );
     
+    function setupFinal(){
+        var docs = dummydocs;
+        $('#preview_0').css('background-image', 'url(assets/'+docs['0'].id+'.png)');
+        $('#preview_0 #title').html(docs['0'].title);
+        $('#preview_1').css('background-image', 'url(assets/'+docs['1'].id+'.png)');
+        $('#preview_1 #title').html(docs['1'].title);
+        $('#preview_2').css('background-image', 'url(assets/'+docs['2'].id+'.png)');
+        $('#preview_2 #title').html(docs['2'].title);
+        $('#final_page').fadeIn(500, "easeInOutQuad", function() { setStep(3); } );
+    }
     
+    setupFinal();
     
 });
 </script>
@@ -159,7 +176,14 @@ $(function () {
 
 <!-- Final FOrm -->
 <div id="final_page">
-<h1>Final content will go here. </h1>
+    <h1>Final content will go here. </h1>
+    
+    <!-- Doc content -->
+    <div id="selection">
+        <div class="doc_option" id="preview_0"><div id="title"></div></div>
+        <div class="doc_option" id="preview_1"><div id="title"></div></div>
+        <div class="doc_option" id="preview_2"><div id="title"></div></div>
+    </div>
 </div>
 <!-- Footer ///////////////////////////////////////////////////////////////// -->
 
